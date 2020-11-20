@@ -19,8 +19,8 @@ Time::Time(int hours, int minutes) {
                     "auto time generation :\n"
                     "hours = 9\n"
                     "minutes = 0\n";
-        _hours = hours;
-        _minutes = minutes;
+        _hours = 9;
+        _minutes = 0;
     }
 }
 
@@ -72,4 +72,9 @@ bool Time::operator==(const Time &rhs) const {
 
 bool Time::operator!=(const Time &rhs) const {
     return !(rhs == *this);
+}
+
+std::ostream &operator<<(std::ostream &os, const Time &time) {
+    os <<  time._hours << ":" << time._minutes;
+    return os;
 }

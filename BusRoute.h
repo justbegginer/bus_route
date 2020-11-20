@@ -4,7 +4,7 @@
 
 #include <iostream>
 #include "Time.h"
-
+#pragma once
 #ifndef INDIVIDUAL7_BUSROUTE_H
 #define INDIVIDUAL7_BUSROUTE_H
 
@@ -46,4 +46,6 @@ public:
     bool operator==(const BusRoute &rhs) const;
 
     bool operator!=(const BusRoute &rhs) const;
+
+    friend std::ostream &operator<<(std::ostream &os, const BusRoute &route);
 };

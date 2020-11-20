@@ -2,7 +2,7 @@
 // Created by raspberry on 20.11.2020.
 //
 #include <iostream>
-
+#pragma once
 #ifndef INDIVIDUAL7_TIME_H
 #define INDIVIDUAL7_TIME_H
 
@@ -41,4 +41,6 @@ public:
     bool operator==(const Time &rhs) const;
 
     bool operator!=(const Time &rhs) const;
+
+    friend std::ostream &operator<<(std::ostream &os, const Time &time);
 };

@@ -68,5 +68,11 @@ bool BusRoute::operator!=(const BusRoute &rhs) const {
     return !(rhs == *this);
 }
 
+std::ostream &operator<<(std::ostream &os, const BusRoute &route) {
+    os << "route_number: " << route._route_number << " ,destination_name: " << route._destination_name
+       << " ,arriving_time: " << route._arriving_time;
+    return os;
+}
+
 
 
