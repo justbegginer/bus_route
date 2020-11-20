@@ -113,20 +113,35 @@ void parse_string_to_BusRoute(std::string str, BusRoute &bus_route) {
 
 void make_route_table(BusRoute *routes, int length) {
     std::ofstream table_file("/home/raspberry/CLionProjects/individual7/table");
-    int max_route_number_digits = std::to_string(routes->getRouteNumber()).size();
+    int max_route_number_digits = 12;
     for (int i = 0; i < length; ++i) {
         if (std::to_string((routes + i)->getRouteNumber()).size() > max_route_number_digits) {
             max_route_number_digits = std::to_string((routes + i)->getRouteNumber()).size();
         }
     }
     int first_colon_size = max_route_number_digits + 1;
-    int max_names_length = routes->getDestinationName().size();
+    int max_names_length = 16;
     for (int i = 0; i < length; ++i) {
         if ((routes + i)->getDestinationName().size() > max_names_length) {
             max_names_length = (routes + i)->getDestinationName().size();
         }
     }
     int second_colon_size = max_names_length + 1;
+    std::string temp = "";
+    for (int j = 0; j < first_colon_size + second_colon_size + 5; ++j) {
+        temp += "-";
+    }
+    table_file << temp << "\n";
+    temp = "| route number" ;
+    for (int j = 0; j < first_colon_size - 12; ++j) {
+        temp += " ";
+    }
+    temp += "| destination name" ;
+    for (int j = 0; j < second_colon_size - 16; ++j) {
+        temp += " ";
+    }
+    temp += "|";
+    table_file << temp << "\n";
     for (int i = 0; i < length; ++i) {
         std::string temp = "";
         for (int j = 0; j < first_colon_size + second_colon_size + 5; ++j) {
@@ -137,8 +152,7 @@ void make_route_table(BusRoute *routes, int length) {
         for (int j = 0; j < first_colon_size - std::to_string((routes + i)->getRouteNumber()).size(); ++j) {
             temp += " ";
         }
-        temp += "|";
-        temp += " " + (routes + i)->getDestinationName();
+        temp += "| " + (routes + i)->getDestinationName();
         for (int j = 0; j < second_colon_size - (routes + i)->getDestinationName().size(); ++j) {
             temp += " ";
         }
