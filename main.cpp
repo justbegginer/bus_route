@@ -10,6 +10,8 @@ void sort_BusRoute_by_Time(BusRoute *bus_routes, int length);
 
 int min_route_number(BusRoute const *bus_routes, int length);
 
+void make_route_table(BusRoute *routes, int length);
+
 int main() {
     std::string file_name;
     std::cout << "enter filename of input file\n";
@@ -36,11 +38,12 @@ int main() {
     catch (...) {
         std::cout << "exception while reading file\n";
     }
-    sort_BusRoute_by_Time(bus_routes_list , length);
+    sort_BusRoute_by_Time(bus_routes_list, length);
     for (int i = 0; i < length; ++i) {
         std::cout << *(bus_routes_list + i) << "\n";
     }
     std::cout << "min route number " << min_route_number(bus_routes_list, length) << "\n";
+    make_route_table(bus_routes_list, length);
     delete[] bus_routes_list;
     return 0;
 }
@@ -92,9 +95,8 @@ void parse_string_to_BusRoute(std::string str, BusRoute &bus_route) {
                 //std::cout << "hours " << temp << '\n';
                 hours = std::stoi(temp);
                 temp = "";
-            }
-            else{
-                temp+= string_style_Time[i];
+            } else {
+                temp += string_style_Time[i];
             }
         }
         //std::cout<< "minutes" << temp<<"\n";
@@ -107,4 +109,44 @@ void parse_string_to_BusRoute(std::string str, BusRoute &bus_route) {
                      "invalid argument";
         exit(1);
     }
+}
+
+void make_route_table(BusRoute *routes, int length) {
+    std::ofstream table_file("/home/raspberry/CLionProjects/individual7/table");
+    int max_route_number_digits = std::to_string(routes->getRouteNumber()).size();
+    for (int i = 0; i < length; ++i) {
+        if (std::to_string((routes + i)->getRouteNumber()).size() > max_route_number_digits) {
+            max_route_number_digits = std::to_string((routes + i)->getRouteNumber()).size();
+        }
+    }
+    int first_colon_size = max_route_number_digits + 1;
+    int max_names_length = routes->getDestinationName().size();
+    for (int i = 0; i < length; ++i) {
+        if ((routes + i)->getDestinationName().size() > max_names_length) {
+            max_names_length = (routes + i)->getDestinationName().size();
+        }
+    }
+    int second_colon_size = max_names_length + 1;
+    for (int i = 0; i < length; ++i) {
+        std::string temp = "";
+        for (int j = 0; j < first_colon_size + second_colon_size + 5; ++j) {
+            temp += "-";
+        }
+        table_file << temp << "\n";
+        temp = "| " + std::to_string((routes + i)->getRouteNumber());
+        for (int j = 0; j < first_colon_size - std::to_string((routes + i)->getRouteNumber()).size(); ++j) {
+            temp += " ";
+        }
+        temp += "|";
+        temp += " " + (routes + i)->getDestinationName();
+        for (int j = 0; j < second_colon_size - (routes + i)->getDestinationName().size(); ++j) {
+            temp += " ";
+        }
+        temp += "|";
+        table_file << temp << "\n";
+    }
+    for (int j = 0; j < first_colon_size + second_colon_size + 5; ++j) {
+        table_file << "-";
+    }
+    table_file << "\n";
 }
