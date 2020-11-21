@@ -43,4 +43,6 @@ public:
     bool operator!=(const Time &rhs) const;
 
     friend std::ostream &operator<<(std::ostream &os, const Time &time);
+
+    Time& operator=(const Time& time);
 };

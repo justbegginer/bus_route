@@ -96,6 +96,14 @@ BusRoute operator--(BusRoute &busRoute, int) {
     return prefix_object;
 }
 
+BusRoute &BusRoute::operator=(const BusRoute &busRoute) {
+    _route_number = busRoute._route_number;
+    _arriving_time = busRoute._arriving_time;
+    _destination_name = busRoute._destination_name;
+    return *this;
+}
+
+
 
 
 

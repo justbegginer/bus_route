@@ -78,3 +78,9 @@ std::ostream &operator<<(std::ostream &os, const Time &time) {
     os <<  time._hours << ":" << time._minutes;
     return os;
 }
+
+Time &Time::operator=(const Time &time) {
+    _hours = time._hours;
+    _minutes = time._minutes;
+    return *this;
+}

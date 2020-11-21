@@ -58,4 +58,6 @@ public:
 
     friend BusRoute operator--(BusRoute& busRoute , int );
 
+    BusRoute& operator=(const BusRoute &busRoute);
+
 };
