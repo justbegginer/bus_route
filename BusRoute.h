@@ -4,6 +4,7 @@
 
 #include <iostream>
 #include "Time.h"
+
 #pragma once
 #ifndef INDIVIDUAL7_BUSROUTE_H
 #define INDIVIDUAL7_BUSROUTE_H
@@ -19,7 +20,7 @@ private:
 public:
     BusRoute();
 
-    BusRoute(int route_number, std::string destination_name, const Time& arriving_time);
+    BusRoute(int route_number, std::string destination_name, const Time &arriving_time);
 
     BusRoute(BusRoute const &bus_route);
 
@@ -35,7 +36,7 @@ public:
 
     void setArrivingTime(const Time &arrivingTime);
 
-    bool operator<(const BusRoute &rhs) const;
+    friend bool operator<(const BusRoute &first, const BusRoute &rhs);
 
     bool operator>(const BusRoute &rhs) const;
 
@@ -48,4 +49,13 @@ public:
     bool operator!=(const BusRoute &rhs) const;
 
     friend std::ostream &operator<<(std::ostream &os, const BusRoute &route);
+
+    BusRoute& operator++();
+
+    BusRoute& operator--();
+
+    friend BusRoute operator++(BusRoute& busRoute , int );
+
+    friend BusRoute operator--(BusRoute& busRoute , int );
+
 };

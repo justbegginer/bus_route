@@ -44,8 +44,8 @@ void BusRoute::setArrivingTime(const Time &arrivingTime) {
     _arriving_time = arrivingTime;
 }
 
-bool BusRoute::operator<(const BusRoute &rhs) const {
-    return (_route_number < rhs._route_number);
+bool operator<(const BusRoute &first , const BusRoute &rhs) {
+    return (first._route_number < rhs._route_number);
 }
 
 bool BusRoute::operator>(const BusRoute &rhs) const {
@@ -73,6 +73,30 @@ std::ostream &operator<<(std::ostream &os, const BusRoute &route) {
        << " ,arriving_time: " << route._arriving_time;
     return os;
 }
+
+BusRoute & BusRoute::operator++() {
+    ++_route_number;
+    return *this;
+}
+
+BusRoute & BusRoute::operator--() {
+    --_route_number;
+    return *this;
+}
+
+BusRoute operator++(BusRoute &busRoute , int ) {
+    BusRoute prefix_object(busRoute);
+    ++busRoute;
+    return prefix_object;
+}
+
+BusRoute operator--(BusRoute &busRoute, int) {
+    BusRoute prefix_object(busRoute);
+    --busRoute;
+    return prefix_object;
+}
+
+
 
 
 

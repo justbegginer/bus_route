@@ -38,6 +38,7 @@ int main() {
     catch (...) {
         std::cout << "exception while reading file\n";
     }
+    bus_routes_list[0]++;
     sort_BusRoute_by_Time(bus_routes_list, length);
     for (int i = 0; i < length; ++i) {
         std::cout << *(bus_routes_list + i) << "\n";
