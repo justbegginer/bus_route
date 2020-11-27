@@ -10,12 +10,13 @@ class Vector {
 private:
     BusRoute *routes;
     int length;
+    void change_size(int difference);
 public:
     Vector();
     Vector(BusRoute *routes , int length);
     Vector(const Vector &vector);
     void push(BusRoute busRoute);
-    void pop();
+    BusRoute pop();
     BusRoute& operator[](int index);
     int size();
     ~Vector();
