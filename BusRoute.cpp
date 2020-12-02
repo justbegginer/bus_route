@@ -12,11 +12,11 @@ BusRoute::BusRoute() {
 BusRoute::BusRoute(int route_number, std::string destination_name, const Time& arriving_time) {
     _route_number = route_number;
     _destination_name = destination_name;
-    _arriving_time = Time(arriving_time);
+    _arriving_time = arriving_time;
 }
 BusRoute::BusRoute(const BusRoute &bus_route) {
     _route_number = bus_route._route_number;
-    _arriving_time = Time(bus_route._arriving_time);
+    _arriving_time = bus_route._arriving_time;
     _destination_name = bus_route._destination_name;
 }
 
