@@ -37,6 +37,8 @@ BusRoute Vector::pop() {
 }
 
 BusRoute &Vector::operator[](int index) {
+    if (index >= length || index < 0)
+        throw std::out_of_range("index of Vector out of range");
     return *(routes + index);
 }
 
