@@ -75,7 +75,11 @@ bool Time::operator!=(const Time &rhs) const {
 }
 
 std::ostream &operator<<(std::ostream &os, const Time &time) {
-    os <<  time._hours << ":" << time._minutes;
+    os <<  time._hours << ":" ;
+    if (time._minutes / 10 == 0 ){
+        os << "0";
+    }
+    os << time._minutes;
     return os;
 }
 
