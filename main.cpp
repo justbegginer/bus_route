@@ -7,7 +7,7 @@
 
 void parse_string_to_BusRoute(std::string str, Vector &bus_route);
 
-void sort_BusRoute_by_Time(Vector bus_routes, int length);
+void sort_BusRoute_by_Time(Vector &bus_routes);
 
 int min_route_number(Vector bus_routes, int length);
 
@@ -38,7 +38,7 @@ int main() {
         std::cout << "exception while reading file\n";
     }
     bus_routes_list[0]++;
-    sort_BusRoute_by_Time(bus_routes_list, length);
+    sort_BusRoute_by_Time(bus_routes_list);
     for (int i = 0; i < length; ++i) {
         std::cout << bus_routes_list[i] << "\n";
     }
@@ -57,15 +57,26 @@ int min_route_number(Vector bus_routes, int length) {
     return bus_routes[min_index].getRouteNumber();
 }
 
-void sort_BusRoute_by_Time(Vector bus_routes, int length) {
-    for (int i = 1; i < length; ++i) {
-        if ((bus_routes[i]).getArrivingTime() > (bus_routes[i]).getArrivingTime()) {
-            //std::cout << bus_routes+i-1;
-            BusRoute temp(bus_routes[i-1]);
-            bus_routes [i - 1] = BusRoute(bus_routes[i]);
-            bus_routes[i] = BusRoute(temp);
+void sort_BusRoute_by_Time(Vector &bus_routes) {
+    //std::cout << "\n";
+    for (int i = 0; i < bus_routes.size()-1; ++i) {
+        Time min(bus_routes[i].getArrivingTime());
+        int index_of_min = i + 1;
+        for (int j = i + 1; j < bus_routes.size(); ++j) {
+            if (min > bus_routes[j].getArrivingTime()) {
+                min = bus_routes[j].getArrivingTime();
+                index_of_min = j;
+
+            }
+        }
+        if (index_of_min + 1 != bus_routes.size()) {
+            BusRoute temp(bus_routes[index_of_min]);
+            bus_routes[index_of_min] = bus_routes[i];
+            bus_routes[i] = temp;
+
         }
     }
+    //std::cout << "\n";
 }
 
 void parse_string_to_BusRoute(std::string str, Vector &bus_routes) {
@@ -122,7 +133,7 @@ void make_route_table(Vector routes, int length) {
     int first_colon_size = max_route_number_digits + 1;
     int max_names_length = 16;
     for (int i = 0; i < length; ++i) {
-        if ((routes [i]).getDestinationName().size() > max_names_length) {
+        if ((routes[i]).getDestinationName().size() > max_names_length) {
             max_names_length = (routes[i]).getDestinationName().size();
         }
     }
@@ -132,11 +143,11 @@ void make_route_table(Vector routes, int length) {
         temp += "-";
     }
     table_file << temp << "\n";
-    temp = "| route number" ;
+    temp = "| route number";
     for (int j = 0; j < first_colon_size - 12; ++j) {
         temp += " ";
     }
-    temp += "| destination name" ;
+    temp += "| destination name";
     for (int j = 0; j < second_colon_size - 16; ++j) {
         temp += " ";
     }
