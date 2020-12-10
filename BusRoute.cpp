@@ -9,11 +9,15 @@ BusRoute::BusRoute() {
     _arriving_time = Time();
 }
 
-BusRoute::BusRoute(int route_number, std::string destination_name, const Time& arriving_time) {
+BusRoute::BusRoute(int route_number, std::string destination_name, const Time &arriving_time) {
     _route_number = route_number;
+    if (_route_number <= 0 ){
+        throw std::invalid_argument("route number less than one\n");
+    }
     _destination_name = destination_name;
     _arriving_time = arriving_time;
 }
+
 BusRoute::BusRoute(const BusRoute &bus_route) {
     _route_number = bus_route._route_number;
     _arriving_time = Time(bus_route._arriving_time);
@@ -44,7 +48,7 @@ void BusRoute::setArrivingTime(const Time &arrivingTime) {
     _arriving_time = arrivingTime;
 }
 
-bool operator<(const BusRoute &first , const BusRoute &rhs) {
+bool operator<(const BusRoute &first, const BusRoute &rhs) {
     return (first._route_number < rhs._route_number);
 }
 
@@ -74,17 +78,17 @@ std::ostream &operator<<(std::ostream &os, const BusRoute &route) {
     return os;
 }
 
-BusRoute & BusRoute::operator++() {
+BusRoute &BusRoute::operator++() {
     ++_route_number;
     return *this;
 }
 
-BusRoute & BusRoute::operator--() {
+BusRoute &BusRoute::operator--() {
     --_route_number;
     return *this;
 }
 
-BusRoute operator++(BusRoute &busRoute , int ) {
+BusRoute operator++(BusRoute &busRoute, int) {
     BusRoute prefix_object(busRoute);
     ++busRoute;
     return prefix_object;
@@ -101,6 +105,29 @@ BusRoute &BusRoute::operator=(const BusRoute &busRoute) {
     _arriving_time = busRoute._arriving_time;
     _destination_name = busRoute._destination_name;
     return *this;
+}
+
+BusRoute::~BusRoute() {
+
+}
+
+std::istream &operator>>(std::istream &os, BusRoute &route) {
+    os >> route._destination_name >> route._arriving_time >> route._route_number;
+    return os;
+}
+
+BusRoute operator+(BusRoute &this_route, BusRoute &another_route) {
+    BusRoute new_bus_route = BusRoute();
+    new_bus_route._route_number = this_route._route_number + another_route._route_number;
+    new_bus_route._arriving_time = this_route._arriving_time + another_route._arriving_time;
+    return new_bus_route;
+}
+
+BusRoute BusRoute::operator-(BusRoute &another_route) {
+    BusRoute new_bus_route = BusRoute();
+    new_bus_route._route_number = this->_route_number + another_route._route_number;
+    new_bus_route._arriving_time = this->_arriving_time + another_route._arriving_time;
+    return new_bus_route;
 }
 
 

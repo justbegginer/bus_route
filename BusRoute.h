@@ -50,14 +50,22 @@ public:
 
     friend std::ostream &operator<<(std::ostream &os, const BusRoute &route);
 
-    BusRoute& operator++();
+    friend std::istream &operator>>(std::istream &os, BusRoute &route);
 
-    BusRoute& operator--();
+    friend BusRoute operator+(BusRoute &this_route, BusRoute &another_route);
 
-    friend BusRoute operator++(BusRoute& busRoute , int );
+    BusRoute operator-(BusRoute &another_route);
 
-    friend BusRoute operator--(BusRoute& busRoute , int );
+    BusRoute &operator++();
 
-    BusRoute& operator=(const BusRoute &busRoute);
+    BusRoute &operator--();
+
+    friend BusRoute operator++(BusRoute &busRoute, int);
+
+    friend BusRoute operator--(BusRoute &busRoute, int);
+
+    BusRoute &operator=(const BusRoute &busRoute);
+
+    virtual ~BusRoute();
 
 };
