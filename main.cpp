@@ -18,8 +18,8 @@ void check_name_correct(std::string name);
 int main() {
     std::string file_name;
     std::cout << "enter filename of input file\n";
-    //std::cin >> file_name;
-    file_name = "/home/raspberry/CLionProjects/individual7/file";
+    std::cin >> file_name;
+    file_name = "/home/raspberry/CLionProjects/individual7/"+file_name;
     Vector bus_routes_list = Vector();
     try {
         std::fstream file(file_name);
@@ -61,30 +61,30 @@ int min_route_number(Vector bus_routes) {
 }
 
 void sort_BusRoute_by_Time(Vector &bus_routes) {
-    for (int i = 0; i < bus_routes.size()-1; ++i) {
+    for (int i = 0; i < bus_routes.size() - 1; ++i) {
         Time min(bus_routes[i].getArrivingTime());
         int index_of_min = i + 1;
+        bool change = false;
         for (int j = i + 1; j < bus_routes.size(); ++j) {
             if (min > bus_routes[j].getArrivingTime()) {
                 min = bus_routes[j].getArrivingTime();
                 index_of_min = j;
-
+                change = true;
             }
         }
-        if (index_of_min + 1 != bus_routes.size()) {
+        if (change) {
             BusRoute temp(bus_routes[index_of_min]);
             bus_routes[index_of_min] = bus_routes[i];
             bus_routes[i] = temp;
 
         }
     }
-    //std::cout << "\n";
 }
 
 void parse_string_to_BusRoute(std::string str, Vector &bus_routes) {
-    std::string string_style_Time;
-    std::string name;
-    std::string route_number;
+    std::string string_style_Time ="";
+    std::string name= "";
+    std::string route_number="";
     std::string temp;
     for (int i = 0; i < str.size(); ++i) {
         if (str[i] == ' ') {
@@ -98,6 +98,8 @@ void parse_string_to_BusRoute(std::string str, Vector &bus_routes) {
             temp += str[i];
         }
     }
+    if(route_number == "" || name =="" || string_style_Time =="")
+        throw std::invalid_argument("missed argument");
     check_name_correct(name);
     try {
         int route_number_int = std::stoi(temp);
@@ -105,7 +107,6 @@ void parse_string_to_BusRoute(std::string str, Vector &bus_routes) {
         int hours, minutes;
         for (int i = 0; i < string_style_Time.size(); ++i) {
             if (string_style_Time[i] == ':') {
-                //std::cout << "hours " << temp << '\n';
                 hours = std::stoi(temp);
                 temp = "";
             } else {
@@ -179,11 +180,11 @@ void make_route_table(Vector routes) {
     table_file << "\n";
 }
 
-void check_name_correct(std::string name){
-    if (name[0] == '-' || name[name.size()-1] == '-')
+void check_name_correct(std::string name) {
+    if (name[0] == '-' || name[name.size() - 1] == '-')
         throw std::invalid_argument("incorrect name");
     for (int i = 0; i < name.size(); ++i) {
-        if (!(name[i]>='a' && name[i]<='z') && !(name[i] >= 'A' && name[i] <= 'Z'))
+        if (!(name[i] >= 'a' && name[i] <= 'z') && !(name[i] >= 'A' && name[i] <= 'Z'))
             throw std::invalid_argument("");
     }
 }

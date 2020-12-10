@@ -25,7 +25,7 @@ Vector::Vector(const Vector &vector) {
     }
 }
 
-void Vector::push(BusRoute& busRoute) {
+void Vector::push(BusRoute &busRoute) {
     change_size(1);
     *(routes + length - 1) = busRoute;
 }
