@@ -15,7 +15,7 @@ Time::Time(int hours, int minutes) {
     _hours = hours;
     _minutes = minutes;
     if (!is_correct_time()) {
-        throw std::invalid_argument("but values of time");
+        throw std::invalid_argument("bad values of time");
     }
 }
 

@@ -1,56 +1,42 @@
 #include <iostream>
 #include <fstream>
 #include <string>
-#include "BusRoute.h"
 #include "Time.h"
-#include "Vector.h"
+#include "main_headers.h"
 
-void parse_string_to_BusRoute(std::string str, Vector &bus_route);
-
-void sort_BusRoute_by_Time(Vector &bus_routes);
-
-int min_route_number(Vector bus_routes);
-
-void make_route_table(Vector routes);
-
-void check_name_correct(std::string name);
 
 int main() {
     std::string file_name;
     std::cout << "enter filename of input file\n";
     std::cin >> file_name;
-    file_name = "/home/raspberry/CLionProjects/individual7/"+file_name;
-    Vector bus_routes_list = Vector();
-    try {
-        std::fstream file(file_name);
-        std::string temp;
-        for (int i = 0; i < 10; ++i) {
-            getline(file, temp);
-            if (temp == "")
-                break;
-            parse_string_to_BusRoute(temp, bus_routes_list);
-        }
-        file.close();
+    file_name = "C:\\Users\\user.v2.0\\CLionProjects\\bus_route\\" + file_name;
+    Vector<BusRoute> bus_routes_list = Vector<BusRoute>();
+    std::fstream file(file_name);
+    std::string temp;
+    for (int i = 0; i < 10; ++i) {
+        getline(file, temp);
+        if (temp == "")
+            break;
+        parse_string_to_BusRoute(temp, bus_routes_list);
     }
-    catch (std::invalid_argument) {
-        std::cout << "invalid value\n";
-        exit(1);
-    }
-    catch (...) {
-        std::cout << "exception while reading file\n";
-        exit(1);
-    }
-    bus_routes_list[0]++;
-    sort_BusRoute_by_Time(bus_routes_list);
     for (int i = 0; i < bus_routes_list.size(); ++i) {
-        std::cout << bus_routes_list[i] << "\n";
+        for (int j = i + 1; j < bus_routes_list.size(); ++j) {
+            if (bus_routes_list[i].getRouteNumber() == bus_routes_list[j].getRouteNumber())
+                throw std::invalid_argument("route_number repeats");
+        }
+    }
+    file.close();
+    sort_BusRoute_by_Time(bus_routes_list);
+    std::fstream sorted("C:\\Users\\user.v2.0\\CLionProjects\\bus_route\\sorted");
+    for (int i = 0; i < bus_routes_list.size(); ++i) {
+        sorted << bus_routes_list[i] << "\n";
     }
     std::cout << "min route number " << min_route_number(bus_routes_list) << "\n";
     make_route_table(bus_routes_list);
     return 0;
 }
 
-int min_route_number(Vector bus_routes) {
+int min_route_number(Vector<BusRoute> bus_routes) {
     int min_index = 0;
     for (int i = 0; i < bus_routes.size(); ++i) {
         if (bus_routes[i] < bus_routes[min_index]) {
@@ -60,7 +46,7 @@ int min_route_number(Vector bus_routes) {
     return bus_routes[min_index].getRouteNumber();
 }
 
-void sort_BusRoute_by_Time(Vector &bus_routes) {
+void sort_BusRoute_by_Time(Vector<BusRoute> &bus_routes) {
     for (int i = 0; i < bus_routes.size() - 1; ++i) {
         Time min(bus_routes[i].getArrivingTime());
         int index_of_min = i + 1;
@@ -81,10 +67,10 @@ void sort_BusRoute_by_Time(Vector &bus_routes) {
     }
 }
 
-void parse_string_to_BusRoute(std::string str, Vector &bus_routes) {
-    std::string string_style_Time ="";
-    std::string name= "";
-    std::string route_number="";
+void parse_string_to_BusRoute(std::string str, Vector<BusRoute> &bus_routes) {
+    std::string string_style_Time = "";
+    std::string name = "";
+    std::string route_number = "";
     std::string temp;
     for (int i = 0; i < str.size(); ++i) {
         if (str[i] == ' ') {
@@ -98,10 +84,11 @@ void parse_string_to_BusRoute(std::string str, Vector &bus_routes) {
             temp += str[i];
         }
     }
-    if(route_number == "" || name =="" || string_style_Time =="")
+    std::cout << route_number;
+    if (temp.empty() || name.empty() || string_style_Time.empty())
         throw std::invalid_argument("missed argument");
     check_name_correct(name);
-    try {
+    check_route_number_correct(temp);
         int route_number_int = std::stoi(temp);
         temp = "";
         int hours, minutes;
@@ -117,17 +104,11 @@ void parse_string_to_BusRoute(std::string str, Vector &bus_routes) {
         Time time(hours, minutes);
         BusRoute new_bus_route = BusRoute(route_number_int, name, time);
         bus_routes.push(new_bus_route);
-        std::cout << "hello\n";
-    }
-    catch (std::invalid_argument) {
-        std::cout << "error while initialization\n"
-                     "invalid argument";
-        exit(1);
-    }
+
 }
 
-void make_route_table(Vector routes) {
-    std::ofstream table_file("/home/raspberry/CLionProjects/individual7/table");
+void make_route_table(Vector<BusRoute> routes) {
+    std::ofstream table_file(R"(C:\Users\user.v2.0\CLionProjects\bus_route\table.txt)");
     int max_route_number_digits = 12;
     for (int i = 0; i < routes.size(); ++i) {
         if (std::to_string((routes[i]).getRouteNumber()).size() > max_route_number_digits) {
@@ -184,7 +165,21 @@ void check_name_correct(std::string name) {
     if (name[0] == '-' || name[name.size() - 1] == '-')
         throw std::invalid_argument("incorrect name");
     for (int i = 0; i < name.size(); ++i) {
-        if (!(name[i] >= 'a' && name[i] <= 'z') && !(name[i] >= 'A' && name[i] <= 'Z'))
-            throw std::invalid_argument("");
+        if ((name[i] >= 'a' && name[i] <= 'z') || (name[i] >= 'A' && name[i] <= 'Z') || (name[i] == '-'))
+            continue;
+        else
+            throw std::invalid_argument("incorrect name");
+    }
+}
+
+void check_route_number_correct(std::string route_number) {
+    try {
+        std::stoi(route_number);
+    }
+    catch (...) {
+        throw std::invalid_argument("route number is not a number");
+    }
+    if (std::stoi(route_number) < 1 || std::stoi(route_number) > 250) {
+        throw std::invalid_argument("invalid route number ");
     }
 }
